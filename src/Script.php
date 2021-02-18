@@ -28,7 +28,7 @@ class Script
     /** @var string */
     protected $handle;
 
-    /** @var string */
+    /** @var string|false */
     protected $src;
 
     /** @var list<string> */
@@ -43,15 +43,25 @@ class Script
     /** @var bool */
     protected $registered;
 
-    public function __construct(string $src): void
+    /**
+     * @param string $url Full URL of the script.
+     */
+    public function __construct(string $url): void
     {
-        $this->handle = sanitize_title(pathinfo((string)parse_url($src, PHP_URL_PATH), PATHINFO_FILENAME));
-        $this->src = $src;
-// TODO support aliases -> src == false
+        $this->handle = sanitize_title(pathinfo((string)parse_url($url, PHP_URL_PATH), PATHINFO_FILENAME));
+        $this->src = $url;
         $this->deps = [];
         $this->ver = null;
         $this->inFooter = false;
         $this->registered = false;
+    }
+
+    public static function aliasOf(string $handle): self
+    {
+        $script = new self($handle);
+        $script->src = false;
+
+        return $script;
     }
 
     public function setHandle(string $handle): self
