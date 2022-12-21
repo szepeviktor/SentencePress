@@ -1,4 +1,4 @@
-<?php // phpcs:disable NeutronStandard.Functions.DisallowCallUserFunc.CallUserFunc,ImportDetection.Imports.RequireImports.Symbol
+<?php // phpcs:disable NeutronStandard.Functions.DisallowCallUserFunc.CallUserFunc,SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 
 /**
  * Hook proxy for lazy loading using a central array.
@@ -36,6 +36,8 @@ trait HookProxyListed
 
     /**
      * @return mixed
+     *
+     * phpcs:disable NeutronStandard.Functions.TypeHint.NoReturnType
      */
     public function receiver(...$args)
     {

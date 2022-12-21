@@ -40,7 +40,7 @@
             "@phpcs:run"
         ],
         "phpcs:run": "phpcs -s --standard=PSR12NeutronRuleset src/",
-        "phpcs:set-php-version": "phpcs --config-set php_version 70100",
+        "phpcs:set-php-version": "phpcs --config-set php_version 70400",
         "phpstan": "phpstan analyze",
         "syntax": "find -L . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 -- php -l",
         "test": [

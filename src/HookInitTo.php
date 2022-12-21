@@ -53,6 +53,7 @@ class HookInitTo
         // Hook 'init' method.
         add_filter(
             $actionTag,
+            // phpcs:ignore NeutronStandard.Functions.TypeHint.NoReturnType
             static function () use ($class) {
                 // phpcs:ignore NeutronStandard.Functions.VariableFunctions.VariableFunction
                 $instance = new $class();

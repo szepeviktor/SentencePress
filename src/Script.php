@@ -129,6 +129,7 @@ class Script
         if (!$this->registered) {
             $this->register();
         }
+        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         // @TODO if (!did_action('wp_enqueue_scripts')) doing_filter??? -> Exception
         wp_enqueue_script($this->handle);
     }

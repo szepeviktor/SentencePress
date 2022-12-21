@@ -1,4 +1,4 @@
-<?php // phpcs:disable NeutronStandard.Functions.DisallowCallUserFunc.CallUserFunc,ImportDetection.Imports.RequireImports.Symbol
+<?php // phpcs:disable NeutronStandard.Functions.DisallowCallUserFunc.CallUserFunc
 
 /**
  * Hook proxy for lazy loading.
@@ -172,6 +172,6 @@ trait HookProxy
         return sprintf('%s/%s', $actionTag, _wp_filter_build_unique_id('', $callable, 0));
     }
 }
-// TODO Measurements: w/o OPcache, OPcache with file read, OPcache without file read
-// TODO Add tests, remove_action, usage as filter with returned value,
-//      one callable hooked to many action tags then removed
+// @TODO Measurements: w/o OPcache, OPcache with file read, OPcache without file read
+// @TODO Add tests, remove_action, usage as filter with returned value,
+//       one callable hooked to many action tags then removed
