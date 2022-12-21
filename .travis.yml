@@ -1,0 +1,35 @@
+# TravisCI configuration for szepeviktor/SentencePress
+
+if: "branch = master"
+
+language: "php"
+arch:
+  - "amd64"
+  - "arm64-graviton2"
+os:
+  - "linux"
+dist: "bionic"
+
+php:
+  - "7.4"
+  - "7.1"
+
+jobs:
+  include:
+    - name: "List outdated dependencies"
+      arch: "arm64-graviton2"
+      php: "7.4"
+      script: "composer outdated --no-interaction --direct"
+
+cache:
+  directories:
+    - "${HOME}/.composer/cache"
+
+before_install:
+  - "composer validate --no-interaction --strict"
+
+install:
+  - "composer update --no-interaction"
+
+script:
+  - "composer run-script --no-interaction test"
