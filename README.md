@@ -6,3 +6,35 @@
 
 These [tools](/src) are recommended for use in agency-type projects
 where you have full control over the development and installation environment.
+
+### Examples
+
+```php
+// Instead of wp_enqueue_script()
+$mainJs = new Script(get_template_directory_uri() . '/assets/js/main.js');
+$mainJs
+    ->setHandle('main-js')
+    ->setVer('8.44')
+    ->moveToFooter()
+    ->enqueue();
+```
+
+```php
+// Instead of add_action('plugins_loaded', [$this, 'init'], 0, 20);
+class Plugin
+{
+    use SzepeViktor\SentencePress\HookAnnotation;
+    public function __construct()
+    {
+        $this->hookMethods();
+    }
+
+    /**
+     * @hook plugins_loaded 20
+     */
+    public function init(): void
+    {
+        doSomething();
+    }
+}
+```
