@@ -3,21 +3,20 @@
 /**
  * Enqueue a script.
  *
- * @package sentencepress/core
- * @author Your Name <username@example.com>
- * @copyright 2019 Your Name or Company Name
- * @license GPL-2.0-or-later http://www.gnu.org/licenses/gpl-2.0.txt
- * @link https://example.com/plugin-name
+ * @author  Viktor Szépe <viktor@szepe.net>
+ * @license https://opensource.org/licenses/MIT MIT
+ * @link    https://github.com/szepeviktor/SentencePress
  */
 
 declare(strict_types=1);
 
-namespace SentencePress;
+namespace SzepeViktor\SentencePress;
 
 use function sanitize_title;
 use function wp_dequeue_script;
 use function wp_deregister_script;
 use function wp_enqueue_script;
+use function wp_parse_url;
 use function wp_register_script;
 
 /**
@@ -46,9 +45,9 @@ class Script
     /**
      * @param string $url Full URL of the script.
      */
-    public function __construct(string $url): void
+    public function __construct(string $url)
     {
-        $this->handle = sanitize_title(pathinfo((string)parse_url($url, PHP_URL_PATH), PATHINFO_FILENAME));
+        $this->handle = sanitize_title(pathinfo((string)wp_parse_url($url, PHP_URL_PATH), PATHINFO_FILENAME));
         $this->src = $url;
         $this->deps = [];
         $this->ver = null;
@@ -130,7 +129,7 @@ class Script
         if (!$this->registered) {
             $this->register();
         }
-        // TODO if (!did_action('wp_enqueue_scripts')) doing_filter??? -> Exception
+        // @TODO if (!did_action('wp_enqueue_scripts')) doing_filter??? -> Exception
         wp_enqueue_script($this->handle);
     }
 
