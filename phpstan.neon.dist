@@ -20,7 +20,7 @@ parameters:
             count: 2
             path: src/SiteInfo.php
         -
-            message: '#^Parameter \#1 \$function of function call_user_func_array expects callable\(\): mixed, array{mixed, mixed} given\.$#'
+            message: '#^Parameter \#1 \$(function|callback) of function call_user_func_array expects callable\(\): mixed, array{mixed, mixed} given\.$#'
             count: 1
             path: src/HookProxy.php
         -

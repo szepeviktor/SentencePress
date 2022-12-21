@@ -26,6 +26,7 @@ cache:
     - "${HOME}/.composer/cache"
 
 before_install:
+  - "phpenv config-rm xdebug.ini"
   - "composer validate --no-interaction --strict"
 
 install:
