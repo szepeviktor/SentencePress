@@ -10,7 +10,7 @@ where you have full control over the development and installation environment.
 ### Examples
 
 ```php
-// Instead of wp_enqueue_script()
+// Instead of wp_enqueue_script('main-js', get_template_directory_uri() . '/assets/js/main.js', [], '8.44', true)
 $mainJs = new Script(get_template_directory_uri() . '/assets/js/main.js');
 $mainJs
     ->setHandle('main-js')
