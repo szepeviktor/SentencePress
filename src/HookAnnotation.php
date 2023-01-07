@@ -1,7 +1,7 @@
 <?php // phpcs:disable SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName
 
 /**
- * Annotation based hooking for classes.
+ * Annotation based hooking for class-like methods.
  *
  * @author  Viktor Szépe <viktor@szepe.net>
  * @license https://opensource.org/licenses/MIT MIT
@@ -23,6 +23,7 @@ use function add_filter;
  * Format: @hook tag 10
  *         @hook tag first
  *         @hook tag last
+ *         @hook skip
  *
  * mindplay/annotations may be a better solution.
  *
@@ -63,12 +64,16 @@ trait HookAnnotation
         $matches = [];
         if (
             \preg_match(
-                //         @hook   (   tag    )      (   priority   )
-                '/^\s+\*\s+@hook\s+([\w\/_=-]+)(?:\s+(\d+|first|last))?\s*$/m',
+                //         @hook   (   tag     )      (   priority   )
+                '/^\s+\*\s+@hook\s+([\w\/._=-]+)(?:\s+(\d+|first|last))?\s*$/m',
                 $docComment,
                 $matches
             ) !== 1
         ) {
+            return null;
+        }
+
+        if ($matches[1] === 'skip') {
             return null;
         }
 

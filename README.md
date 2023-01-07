@@ -38,3 +38,22 @@ class Plugin
     }
 }
 ```
+
+```php
+// Instead of require __DIR__ . '/inc/template-functions.php';
+// template-functions.php will be loaded and pingbackHeader called when wp_head hook is fired
+class Template
+{
+    use SzepeViktor\SentencePress\HookProxy;
+    public function __construct()
+    {
+        $this->lazyHookFunction(
+            'wp_head',
+            __NAMESPACE__ . '\\TemplateFunction\\pingbackHeader',
+            10,
+            0,
+            __DIR__ . '/inc/template-functions.php'
+        );
+    }
+}
+```
