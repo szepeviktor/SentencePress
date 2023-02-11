@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace SzepeViktor\SentencePress;
 
+use function add_filter;
+use function remove_filter;
 use function sanitize_title;
 use function wp_dequeue_script;
 use function wp_deregister_script;
@@ -42,6 +44,9 @@ class Script
     /** @var bool */
     protected $registered;
 
+    /** @var array<string> */
+    protected $attributes;
+
     /**
      * @param string $url Full URL of the script.
      */
@@ -53,6 +58,7 @@ class Script
         $this->ver = null;
         $this->inFooter = false;
         $this->registered = false;
+        $this->attributes = [];
     }
 
     public static function aliasOf(string $handle): self
@@ -110,6 +116,10 @@ class Script
 
     public function register(): void
     {
+        if ($this->registered) {
+            return;
+        }
+
         wp_register_script($this->handle, $this->src, $this->deps, $this->ver, $this->inFooter);
         $this->registered = true;
     }
@@ -129,6 +139,9 @@ class Script
         if (!$this->registered) {
             $this->register();
         }
+        if ($this->attributes !== []) {
+            add_filter('script_loader_tag', [$this, 'modifyScriptElement'], 10, 2);
+        }
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         // @TODO if (!did_action('wp_enqueue_scripts')) doing_filter??? -> Exception
         wp_enqueue_script($this->handle);
@@ -140,6 +153,67 @@ class Script
             return;
         }
 
+        if ($this->attributes !== []) {
+            remove_filter('script_loader_tag', [$this, 'modifyScriptElement'], 10);
+        }
         wp_dequeue_script($this->handle);
+    }
+
+    public function modifyScriptElement(string $html, string $currentHandle): string
+    {
+        if ($currentHandle !== $this->handle) {
+            return $html;
+        }
+
+        $attributes = array_reduce(
+            $this->attributes,
+            static function (array $attributes, string $attribute) use ($html): array {
+                // Skip already present attributes
+                if (preg_match(sprintf('#\s%s[\s>]#', preg_quote($attribute, '#')), $html)) {
+                    return $attributes;
+                }
+
+                $attributes[] = $attribute;
+
+                return $attributes;
+            },
+            []
+        );
+
+        if ($attributes === []) {
+            return $html;
+        }
+
+        return str_replace(' src=', sprintf(' %s src=', join(' ', $attributes)), $html);
+    }
+
+    /**
+     * @param non-empty-string $attributeString
+     */
+    public function addAttribute(string $attributeString): self
+    {
+        $this->attributes[] = $attributeString;
+
+        return $this;
+    }
+
+    public function loadAsync(): self
+    {
+        return $this->addAttribute('async');
+    }
+
+    public function executeDefer(): self
+    {
+        return $this->addAttribute('defer');
+    }
+
+    public function executeAsModule(): self
+    {
+        return $this->addAttribute('type="module"');
+    }
+
+    public function executeNomodule(): self
+    {
+        return $this->addAttribute('nomodule');
     }
 }
