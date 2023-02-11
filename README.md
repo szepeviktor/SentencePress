@@ -7,6 +7,15 @@
 These [tools](/src) are recommended for use in agency-type projects
 where you have full control over the development and installation environment.
 
+### Installation
+
+```bash
+composer require szepeviktor/sentencepress
+```
+
+See [WordPress website lifecycle](https://github.com/szepeviktor/wordpress-website-lifecycle)
+for wokring with WordPress.
+
 ### Examples
 
 ```php
