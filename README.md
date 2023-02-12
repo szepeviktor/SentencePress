@@ -14,7 +14,7 @@ composer require szepeviktor/sentencepress
 ```
 
 See [WordPress website lifecycle](https://github.com/szepeviktor/wordpress-website-lifecycle)
-for wokring with WordPress.
+for working with WordPress.
 
 ### Examples
 

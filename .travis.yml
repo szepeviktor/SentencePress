@@ -16,10 +16,22 @@ php:
 
 jobs:
   include:
-    - name: "List outdated dependencies"
+    -
+      name: "List outdated dependencies"
       arch: "arm64-graviton2"
       php: "7.4"
       script: "composer outdated --no-interaction --direct"
+    -
+      name: "Spell check"
+      language: "python"
+      arch: "arm64-graviton2"
+      python: "3.9"
+      cache: "pip"
+      before_install: "skip"
+      install: |
+        pip install --user 'codespell>=2.2'
+      script: |
+        "$(python -m site --user-base)/bin/codespell"
 
 cache:
   directories:
