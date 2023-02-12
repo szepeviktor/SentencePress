@@ -29,9 +29,9 @@ jobs:
       cache: "pip"
       before_install: "skip"
       install: |
-        pip install --user 'codespell>=2.2'
+        pip install 'codespell>=2.2'
       script: |
-        "$(python -m site --user-base)/bin/codespell"
+        codespell
 
 cache:
   directories:
