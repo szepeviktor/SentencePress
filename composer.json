@@ -11,8 +11,8 @@
         "php": "^7.4 || ^8.0"
     },
     "require-dev": {
-        "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^0.6.1",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+        "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^0.8",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "szepeviktor/phpstan-wordpress": "^1.0.2"
     },
     "config": {
