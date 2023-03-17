@@ -23,23 +23,21 @@ use function sanitize_key;
  * Create an HTML attribute string from an array.
  *
  * @param array<string, string|null> $attrs HTML attributes.
- * @return string
  */
 function tagAttrString(array $attrs = []): string
 {
     // Attributes.
-    $attrString = '';
+    $attrStrings = [];
     foreach ($attrs as $attrName => $attrValue) {
-        $attrName = \strtolower($attrName);
-        $attrName = \preg_replace('/[^a-z0-9-]/', '', $attrName);
+        $attrName = \preg_replace('/[^a-z0-9-]/', '', \strtolower($attrName));
         // Boolean Attributes.
         if ($attrValue === null) {
-            $attrString .= \sprintf(' %s', $attrName);
+            $attrStrings[] = \sprintf('%s', $attrName);
             continue;
         }
 
-        $attrString .= \sprintf(
-            ' %s="%s"',
+        $attrStrings[] = \sprintf(
+            '%s="%s"',
             $attrName,
             \in_array($attrName, ['href', 'src'], true)
                 ? esc_url($attrValue)
@@ -47,7 +45,7 @@ function tagAttrString(array $attrs = []): string
         );
     }
 
-    return $attrString;
+    return \implode(' ', $attrStrings);
 }
 
 /**
@@ -55,10 +53,8 @@ function tagAttrString(array $attrs = []): string
  *
  * @see https://www.w3.org/TR/html/syntax.html#void-elements
  *
- * @param string $name Tag name.
  * @param array<string, string|null> $attrs HTML attributes.
  * @param string|\Traversable<int, string> $content Raw HTML content.
- * @return string
  * @throws \Exception
  */
 function tag(string $name = 'div', array $attrs = [], $content = ''): string
@@ -70,7 +66,7 @@ function tag(string $name = 'div', array $attrs = [], $content = ''): string
 
     $name = sanitize_key($name);
     if ($content instanceof Traversable) {
-        $content = \implode(\iterator_to_array($content));
+        $content = \implode('', \iterator_to_array($content));
     }
 
     // Void elements.
@@ -96,7 +92,6 @@ function tag(string $name = 'div', array $attrs = [], $content = ''): string
  * @param array<string, string> $attrs HTML attributes of the parent.
  * @param array<int, string> $childrenContent Raw HTML content of children.
  * @param string $childTagName Name of children tags.
- * @return string
  */
 function tagList(
     string $name = 'ul',
@@ -116,10 +111,6 @@ function tagList(
 
 /**
  * Create a DIV element with classes.
- *
- * @param string $classes
- * @param string $htmlContent
- * @return string
  */
 function tagDivClass(string $classes, string $htmlContent = ''): string
 {
@@ -128,10 +119,6 @@ function tagDivClass(string $classes, string $htmlContent = ''): string
 
 /**
  * Create an H3 element with classes.
- *
- * @param string $classes
- * @param string $htmlContent
- * @return string
  */
 function tagH3Class(string $classes, string $htmlContent = ''): string
 {
@@ -142,8 +129,6 @@ function tagH3Class(string $classes, string $htmlContent = ''): string
  * Create an HTML element from tag name and array of attributes.
  *
  * @param array{tag: string, attrs: array<string, string|null>} $skeleton
- * @param string $htmlContent
- * @return string
  */
 function tagFromSkeleton(array $skeleton, string $htmlContent = ''): string
 {
@@ -177,5 +162,27 @@ function tagSelect(array $attrs, array $options, string $currentValue = ''): str
         'select',
         $attrs,
         \implode('', $optionElements)
+    );
+}
+
+/**
+ * @param mixed $condition
+ */
+function ifPrint($condition, string $string): void
+{
+    if (!$condition) {
+        return;
+    }
+
+    // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+    print $string;
+}
+
+function printAssetUri(string $path = ''): void
+{
+    \printf(
+        '%s/assets%s',
+        \dirname(get_template_directory_uri()),
+        $path
     );
 }
