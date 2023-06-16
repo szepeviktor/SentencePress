@@ -20,6 +20,26 @@ use function esc_url;
 use function sanitize_key;
 
 /**
+ * Return whether an array or a string is empty.
+ *
+ * Throw exception on int|float|bool|null|object|callable|resource
+ *
+ * @param array|string $thing
+ */
+function is_empty($thing): bool
+{
+    if (is_array($thing)) {
+        return $thing === [];
+    }
+
+    if (is_string($thing)) {
+        return $thing === '';
+    }
+
+    throw new \InvalidArgumentException('Not an string nor an array.');
+}
+
+/**
  * Create an HTML attribute string from an array.
  *
  * @param array<string, string|null> $attrs HTML attributes.
