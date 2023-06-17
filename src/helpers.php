@@ -24,9 +24,9 @@ use function sanitize_key;
  *
  * Throw exception on int|float|bool|null|object|callable|resource
  *
- * @param array|string $thing
+ * @param mixed $thing
  */
-function is_empty($thing): bool
+function isEmpty($thing): bool
 {
     if (is_array($thing)) {
         return $thing === [];
