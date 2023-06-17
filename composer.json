@@ -1,25 +1,19 @@
 {
     "name": "szepeviktor/sentencepress",
     "description": "OOP toolkit for daily tasks in WordPress development.",
+    "license": "MIT",
     "keywords": [
         "tools",
         "oop",
         "wordpress"
     ],
-    "license": "MIT",
     "require": {
         "php": "^7.4 || ^8.0"
     },
     "require-dev": {
-        "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^0.8",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^0.9",
         "szepeviktor/phpstan-wordpress": "^1.0.2"
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
     },
     "autoload": {
         "psr-4": {
@@ -33,6 +27,12 @@
         "psr-4": {
             "SzepeViktor\\SentencePress\\Tests\\": "tests/"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "optimize-autoloader": true
     },
     "scripts": {
         "cs": [
