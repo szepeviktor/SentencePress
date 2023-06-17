@@ -32,10 +32,7 @@ class HookConstructorTo
      * Hook to the action in the method name.
      *
      * @param string $actionTag
-     * @param array<class-string|int> $arguments = [
-     *     @type class-string $class
-     *     @type int $pritority
-     * ]
+     * @param array{class-string, ?int} $arguments
      */
     public static function __callStatic(string $actionTag, array $arguments): void
     {
