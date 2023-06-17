@@ -36,7 +36,7 @@ class HookConstructorTo
      */
     public static function __callStatic(string $actionTag, array $arguments): void
     {
-        if ($arguments === []) {
+        if (!isset($arguments[0])) {
             throw new \ArgumentCountError('Class name must be supplied.');
         }
 
