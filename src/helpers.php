@@ -50,7 +50,7 @@ function tagAttrString(array $attrs = []): string
     $attrStrings = [];
     foreach ($attrs as $attrName => $attrValue) {
         $attrName = \preg_replace('/[^a-z0-9-]/', '', \strtolower($attrName));
-        // Boolean Attributes.
+        // Boolean attributes.
         if ($attrValue === null) {
             $attrStrings[] = \sprintf('%s', $attrName);
             continue;
@@ -183,6 +183,15 @@ function tagSelect(array $attrs, array $options, string $currentValue = ''): str
         $attrs,
         \implode('', $optionElements)
     );
+}
+
+/**
+ * @see https://html.spec.whatwg.org/multipage/introduction.html#syntax-errors
+ */
+function htmlComment(string $comment): string
+{
+    // Replace dashes with &mdash-es to be sure.
+    return sprintf('<!-- %s -->', str_replace('--', '—', $comment));
 }
 
 /**
