@@ -36,7 +36,7 @@ function isEmpty($thing): bool
         return $thing === '';
     }
 
-    throw new \InvalidArgumentException('Not an string nor an array.');
+    throw new \InvalidArgumentException('Not a string nor an array.');
 }
 
 /**
