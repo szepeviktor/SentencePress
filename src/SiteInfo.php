@@ -21,12 +21,8 @@ use function trailingslashit;
  */
 class SiteInfo
 {
-    /**
-     * Site info.
-     *
-     * @var array<string, string>
-     */
-    protected $info = [];
+    /** @var array<string, string> */
+    protected $siteInfo = [];
 
     /**
      * Set paths and URLs.
@@ -37,13 +33,13 @@ class SiteInfo
     {
         $uploadPathAndUrl = \wp_upload_dir();
         // phpcs:disable NeutronStandard.AssignAlign.DisallowAssignAlign.Aligned
-        $this->info = [
+        $this->siteInfo = [
             // Core
             'site_path'     => \ABSPATH,
             'site_url'      => \site_url(),
             'home_path'     => $this->getHomePath(),
             'home_url'      => \get_home_url(),
-            'includes_path' => \ABSPATH . \WPINC,
+            'includes_path' => sprintf('%s%s', \ABSPATH, \WPINC),
             'includes_url'  => \includes_url(),
 
             // Content
@@ -100,7 +96,8 @@ class SiteInfo
     {
         $this->setInfo();
 
-        return trailingslashit($this->info['parent_theme_path']) !== trailingslashit($this->info['child_theme_path']);
+        return trailingslashit($this->siteInfo['parent_theme_path'])
+            !== trailingslashit($this->siteInfo['child_theme_path']);
     }
 
     /**
@@ -110,13 +107,13 @@ class SiteInfo
     {
         // phpcs:disable Squiz.NamingConventions.ValidVariableName
         global $wp_filesystem;
-        if (! $wp_filesystem instanceof WP_Filesystem_Base) {
-            require_once ABSPATH . 'wp-admin/includes/file.php';
+        if (!$wp_filesystem instanceof WP_Filesystem_Base) {
+            require_once sprintf('%swp-admin/includes/file.php', \ABSPATH);
         }
 
         $this->setInfo();
 
-        $uploadsDir = trailingslashit($this->info['uploads_path']);
+        $uploadsDir = trailingslashit($this->siteInfo['uploads_path']);
 
         return $wp_filesystem->exists($uploadsDir) && $wp_filesystem->is_writable($uploadsDir);
         // phpcs:enable
@@ -124,11 +121,11 @@ class SiteInfo
 
     protected function setInfo(): void
     {
-        if ($this->info !== []) {
+        if ($this->siteInfo !== []) {
             return;
         }
 
-        if (! \did_action('init')) {
+        if (!\did_action('init')) {
             throw new \LogicException('SiteInfo must be used in "init" action or later.');
         }
 
@@ -139,12 +136,12 @@ class SiteInfo
     {
         $this->setInfo();
 
-        $key = $name . $suffix;
-        if (! \array_key_exists($key, $this->info)) {
-            throw new \DomainException('Unknown SiteInfo key: ' . $key);
+        $infoKey = sprintf('%s%s', $name, $suffix);
+        if (!\array_key_exists($infoKey, $this->siteInfo)) {
+            throw new \DomainException(sprintf('Unknown SiteInfo key: %s', $infoKey));
         }
 
-        return trailingslashit($this->info[$key]);
+        return trailingslashit($this->siteInfo[$infoKey]);
     }
 
     protected function getHomePath(): string

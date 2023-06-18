@@ -62,7 +62,7 @@ class Is
     public static function commentAuthor(): bool
     {
         // phpcs:ignore WordPress.VIP.RestrictedVariables.cache_constraints___COOKIE
-        return isset($_COOKIE['comment_author_' . \COOKIEHASH]);
+        return isset($_COOKIE[sprintf('comment_author_%s', \COOKIEHASH)]);
     }
 
     /**
@@ -105,7 +105,7 @@ class Is
                         === \wp_parse_url(\wp_login_url('', true), \PHP_URL_PATH);
             case 'async-upload':
                 return isset($_SERVER['SCRIPT_FILENAME'])
-                    && \ABSPATH . 'wp-admin/async-upload.php' === $_SERVER['SCRIPT_FILENAME'];
+                    && sprintf('%swp-admin/async-upload.php', \ABSPATH) === $_SERVER['SCRIPT_FILENAME'];
             case 'preview': // in 'parse_query' action if (is_main_query())
                 return \is_preview() || \is_customize_preview();
             case 'autosave': // After 'heartbeat_received', 500 action

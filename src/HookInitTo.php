@@ -31,16 +31,14 @@ class HookInitTo
      * Hook to the action in the method name.
      *
      * @param string $actionTag
-     * @param array<class-string|int> $arguments = [
-     *     @type class-string $class
-     *     @type int $pritority
-     * ]
+     * @param array{0?: class-string, 1?: int} $arguments
+     *
      * @throws \ArgumentCountError
      * @throws \ReflectionException
      */
     public static function __callStatic(string $actionTag, array $arguments): void
     {
-        if ($arguments === []) {
+        if (!isset($arguments[0])) {
             throw new \ArgumentCountError('Class name must be supplied.');
         }
 

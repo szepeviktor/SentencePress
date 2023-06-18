@@ -172,7 +172,9 @@ trait HookProxyListed
     protected function generateClosureWithInjector(string $actionTag, callable $callable, ?callable $injector): Closure
     {
         if (! is_array($callable)) {
-            throw new \InvalidArgumentException('Callable is not an array: ' . var_export($callable, true));
+            throw new \InvalidArgumentException(
+                sprintf('Callable is not an array: %s', var_export($callable, true))
+            );
         }
 
         $id = $this->buildUniqueId($actionTag, $callable);

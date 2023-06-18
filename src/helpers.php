@@ -164,14 +164,14 @@ function tagFromSkeleton(array $skeleton, string $htmlContent = ''): string
 function tagSelect(array $attrs, array $options, string $currentValue = ''): string
 {
     $optionElements = \array_map(
-        static function (string $value, string $item) use ($currentValue): string {
+        static function (string $optionValue, string $optionItem) use ($currentValue): string {
             return tag(
                 'option',
                 \array_merge(
-                    ['value' => $value],
-                    $value === $currentValue ? ['selected' => null] : []
+                    ['value' => $optionValue],
+                    $optionValue === $currentValue ? ['selected' => null] : []
                 ),
-                esc_html($item)
+                esc_html($optionItem)
             );
         },
         \array_keys($options),

@@ -43,12 +43,12 @@ class Db
      * Noop on set.
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed $propertyValue
      * @return void
      *
      * phpcs:disable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
-    public function __set(string $name, $value): void
+    public function __set(string $name, $propertyValue): void
     {
     }
     // phpcs:enable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
@@ -67,7 +67,7 @@ class Db
 
         $callback = [$wpdb, $name];
         if (! \is_callable($callback)) {
-            throw new \InvalidArgumentException('Unknown wpdb method: ' . $name);
+            throw new \InvalidArgumentException(sprintf('Unknown wpdb method: %s', $name));
         }
 
         // phpcs:ignore NeutronStandard.Functions.DisallowCallUserFunc.CallUserFunc
