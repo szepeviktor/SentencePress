@@ -107,7 +107,7 @@ class SiteInfo
     {
         // phpcs:disable Squiz.NamingConventions.ValidVariableName
         global $wp_filesystem;
-        if (!$wp_filesystem instanceof WP_Filesystem_Base) {
+        if (! $wp_filesystem instanceof WP_Filesystem_Base) {
             require_once sprintf('%swp-admin/includes/file.php', \ABSPATH);
         }
 
@@ -125,7 +125,7 @@ class SiteInfo
             return;
         }
 
-        if (!\did_action('init')) {
+        if (! \did_action('init')) {
             throw new \LogicException('SiteInfo must be used in "init" action or later.');
         }
 
@@ -137,7 +137,7 @@ class SiteInfo
         $this->setInfo();
 
         $infoKey = sprintf('%s%s', $name, $suffix);
-        if (!\array_key_exists($infoKey, $this->siteInfo)) {
+        if (! \array_key_exists($infoKey, $this->siteInfo)) {
             throw new \DomainException(sprintf('Unknown SiteInfo key: %s', $infoKey));
         }
 

@@ -38,11 +38,10 @@ class HookInitTo
      */
     public static function __callStatic(string $actionTag, array $arguments): void
     {
-        if (!isset($arguments[0])) {
+        if (! isset($arguments[0])) {
             throw new \ArgumentCountError('Class name must be supplied.');
         }
 
-        // phpcs:ignore SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion
         /** @var class-string $class */
         $class = $arguments[0];
 
@@ -60,7 +59,7 @@ class HookInitTo
 
                 return $instance->init(...$args);
             },
-            \intval($arguments[1] ?? self::DEFAULT_PRIORITY),
+            (int)($arguments[1] ?? self::DEFAULT_PRIORITY),
             $initMethod->getNumberOfParameters()
         );
     }

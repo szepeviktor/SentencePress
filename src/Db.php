@@ -1,4 +1,4 @@
-<?php // phpcs:disable NeutronStandard.Functions.TypeHint.NoReturnType
+<?php // phpcs:disable NeutronStandard.Functions.TypeHint.NoReturnType,NeutronStandard.MagicMethods.DisallowMagicGet.MagicGet,NeutronStandard.MagicMethods.DisallowMagicSet.MagicSet,NeutronStandard.MagicMethods.RiskyMagicMethod.RiskyMagicMethod
 
 /**
  * This is a gift for Phil.
@@ -11,8 +11,6 @@
 declare(strict_types=1);
 
 namespace SzepeViktor\SentencePress;
-
-// phpcs:disable NeutronStandard.MagicMethods.DisallowMagicGet.MagicGet,NeutronStandard.MagicMethods.DisallowMagicSet.MagicSet,NeutronStandard.MagicMethods.RiskyMagicMethod.RiskyMagicMethod
 
 /**
  * Connect to global $wpdb instance from OOP code.

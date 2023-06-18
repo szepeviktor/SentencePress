@@ -190,7 +190,7 @@ function tagSelect(array $attrs, array $options, string $currentValue = ''): str
  */
 function ifPrint($condition, string $string): void
 {
-    if (!$condition) {
+    if (! $condition) {
         return;
     }
 

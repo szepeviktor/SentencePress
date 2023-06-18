@@ -1,4 +1,4 @@
-<?php // phpcs:disable SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName
+<?php
 
 /**
  * Annotation based hooking for class-like methods.
@@ -92,7 +92,7 @@ trait HookAnnotation
                 $priority = PHP_INT_MAX;
                 break;
             default:
-                $priority = \intval($matches[2]);
+                $priority = (int)$matches[2];
                 break;
         }
 

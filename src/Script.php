@@ -126,7 +126,7 @@ class Script
 
     public function deregister(): void
     {
-        if (!$this->registered) {
+        if (! $this->registered) {
             return;
         }
 
@@ -136,20 +136,20 @@ class Script
 
     public function enqueue(): void
     {
-        if (!$this->registered) {
+        if (! $this->registered) {
             $this->register();
         }
         if ($this->attributes !== []) {
             add_filter('script_loader_tag', [$this, 'modifyScriptElement'], 10, 2);
         }
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-        // @TODO if (!did_action('wp_enqueue_scripts')) doing_filter??? -> Exception
+        // @TODO if (! did_action('wp_enqueue_scripts')) doing_filter??? -> Exception
         wp_enqueue_script($this->handle);
     }
 
     public function dequeue(): void
     {
-        if (!$this->registered) {
+        if (! $this->registered) {
             return;
         }
 
@@ -184,7 +184,7 @@ class Script
             return $html;
         }
 
-        return str_replace(' src=', sprintf(' %s src=', join(' ', $attributes)), $html);
+        return str_replace(' src=', sprintf(' %s src=', implode(' ', $attributes)), $html);
     }
 
     /**

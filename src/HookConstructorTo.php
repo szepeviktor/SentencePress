@@ -36,11 +36,10 @@ class HookConstructorTo
      */
     public static function __callStatic(string $actionTag, array $arguments): void
     {
-        if (!isset($arguments[0])) {
+        if (! isset($arguments[0])) {
             throw new \ArgumentCountError('Class name must be supplied.');
         }
 
-        // phpcs:ignore SlevomatCodingStandard.PHP.RequireExplicitAssertion.RequiredExplicitAssertion
         /** @var class-string $class */
         $class = $arguments[0];
 
@@ -58,7 +57,7 @@ class HookConstructorTo
                 // phpcs:ignore NeutronStandard.Functions.VariableFunctions.VariableFunction
                 new $class(...$args);
             },
-            \intval($arguments[1] ?? self::DEFAULT_PRIORITY),
+            (int)($arguments[1] ?? self::DEFAULT_PRIORITY),
             $constructor->getNumberOfParameters()
         );
     }

@@ -149,7 +149,7 @@ trait HookProxy
 
     protected function generateClosureWithInjector(string $actionTag, callable $callable, ?callable $injector): Closure
     {
-        if (!is_array($callable)) {
+        if (! is_array($callable)) {
             throw new \InvalidArgumentException(
                 sprintf('Callable is not an array: %s', var_export($callable, true))
             );
