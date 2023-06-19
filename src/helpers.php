@@ -17,6 +17,7 @@ use Traversable;
 use function esc_attr;
 use function esc_html;
 use function esc_url;
+use function get_template_directory_uri;
 use function sanitize_key;
 
 /**
@@ -28,11 +29,11 @@ use function sanitize_key;
  */
 function isEmpty($thing): bool
 {
-    if (is_array($thing)) {
+    if (\is_array($thing)) {
         return $thing === [];
     }
 
-    if (is_string($thing)) {
+    if (\is_string($thing)) {
         return $thing === '';
     }
 
@@ -190,8 +191,8 @@ function tagSelect(array $attrs, array $options, string $currentValue = ''): str
  */
 function htmlComment(string $comment): string
 {
-    // Replace dashes with &mdash-es to be sure.
-    return sprintf('<!-- %s -->', str_replace('--', '—', $comment));
+    // Replace two dashes with an &mdash to be on the safe side.
+    return \sprintf('<!-- %s -->', \str_replace('--', '—', $comment));
 }
 
 /**
@@ -209,9 +210,9 @@ function ifPrint($condition, string $string): void
 
 function printAssetUri(string $path = ''): void
 {
-    \printf(
+    print esc_url(\sprintf(
         '%s/assets%s',
         \dirname(get_template_directory_uri()),
         $path
-    );
+    ));
 }
