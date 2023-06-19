@@ -210,9 +210,12 @@ function ifPrint($condition, string $string): void
 
 function printAssetUri(string $path = ''): void
 {
-    print esc_url(\sprintf(
-        '%s/assets%s',
-        \dirname(get_template_directory_uri()),
-        $path
-    ));
+    // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+    print esc_url(
+        \sprintf(
+            '%s/assets%s',
+            \dirname(get_template_directory_uri()),
+            $path
+        )
+    );
 }
