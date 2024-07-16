@@ -41,6 +41,16 @@ function isEmpty($thing): bool
 }
 
 /**
+ * Check whether a value is a non-empty array.
+ *
+ * @param mixed $array Array to be tested.
+ */
+function isNonEmptyArray($array): bool
+{
+    return is_array($array) && $array !== [];
+}
+
+/**
  * Create an HTML attribute string from an array.
  *
  * @param array<string, string|null> $attrs HTML attributes.
