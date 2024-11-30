@@ -229,3 +229,55 @@ function printAssetUri(string $path = ''): void
         )
     );
 }
+
+/**
+ * Prepare an SVG for inline display.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_In_HTML_Introduction
+ *
+ * @param array<string, string> $attrs
+ */
+function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): string
+{
+    $base_dir = get_template_directory().'/assets/img/';
+    $empty_svg = '<svg class="svg-empty"></svg>';
+
+    $cache_key = 'file-'.md5($filename.serialize($attrs));
+    $xml = wp_cache_get($cache_key, 'svg-contents');
+    if ($xml !== false) {
+        return $xml;
+    }
+
+    $contents = file_get_contents($base_dir.$filename);
+    if ($contents === false || $contents === '') {
+        return $empty_svg;
+    }
+
+    $document = new DOMDocument();
+    $document->loadXML($contents);
+
+    $svg_elems = $document->getElementsByTagName('svg');
+    if ($svg_elems->length === 0) {
+        return $empty_svg;
+    }
+
+    // May cause duplicate ID error
+    //$svg_elems->item(0)->removeAttribute('id');
+
+    foreach ($attrs as $attr_name => $attr_value) {
+        $svg_elems->item(0)->setAttribute($attr_name, $attr_value);
+    }
+
+    // SVG version 1.1
+    //$document->xmlVersion = '1.1';
+    //$svg_elems->item(0)->setAttribute('version', '1.1');
+
+    // Handle the SVG as an image
+    $svg_elems->item(0)->setAttribute('role', 'img');
+
+    $xml = $document->saveXML($svg_elems->item(0));
+
+    wp_cache_set($cache_key, $xml, 'svg-contents', $ttl);
+
+    return $xml;
+}
