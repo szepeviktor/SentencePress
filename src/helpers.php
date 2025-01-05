@@ -246,6 +246,7 @@ function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): str
     $cache_key = 'file-'.md5($filename.serialize($attrs));
     $xml = wp_cache_get($cache_key, 'svg-contents');
     if ($xml !== false) {
+        /** @var string $xml */
         return $xml;
     }
 
@@ -262,21 +263,25 @@ function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): str
         return $empty_svg;
     }
 
+    /** @var \DOMElement $svg_elem */
+    $svg_elem = $svg_elems->item(0);
+
     // May cause duplicate ID error
-    //$svg_elems->item(0)->removeAttribute('id');
+    //$svg_elem->removeAttribute('id');
 
     foreach ($attrs as $attr_name => $attr_value) {
-        $svg_elems->item(0)->setAttribute($attr_name, $attr_value);
+        $svg_elem->setAttribute($attr_name, $attr_value);
     }
 
     // SVG version 1.1
     //$document->xmlVersion = '1.1';
-    //$svg_elems->item(0)->setAttribute('version', '1.1');
+    //$svg_elem->setAttribute('version', '1.1');
 
     // Handle the SVG as an image
-    $svg_elems->item(0)->setAttribute('role', 'img');
+    $svg_elem->setAttribute('role', 'img');
 
-    $xml = $document->saveXML($svg_elems->item(0));
+    /** @var string $xml */
+    $xml = $document->saveXML($svg_elem);
 
     wp_cache_set($cache_key, $xml, 'svg-contents', $ttl);
 

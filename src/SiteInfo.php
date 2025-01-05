@@ -151,6 +151,7 @@ class SiteInfo
         if ($homeUrl !== '' && \strcasecmp($homeUrl, $siteUrl) !== 0) {
             $pos = \strripos(\ABSPATH, trailingslashit(\str_ireplace($homeUrl, '', $siteUrl)));
             if ($pos !== false) {
+                // @phpstan-ignore return.type
                 return \substr(\ABSPATH, 0, $pos);
             }
         }
