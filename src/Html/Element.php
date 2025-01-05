@@ -33,6 +33,7 @@ class Element
 
     public const QUOTATION_MARK = '"';
 
+    /** @see https://html.spec.whatwg.org/multipage/syntax.html#void-elements */
     public const VOIDS = [
         'area', 'base', 'br', 'col', 'embed', 'hr', 'img',
         'input', 'link', 'meta', 'param', 'source', 'track', 'wbr',
@@ -49,8 +50,6 @@ class Element
 
     /**
      * Create an HTML element with pure PHP.
-     *
-     * @see https://html.spec.whatwg.org/multipage/syntax.html#void-elements
      *
      * @param array<string, string|null> $attributes
      * @param string|\Traversable<int, string> $content Raw HTML content.
