@@ -14,6 +14,9 @@ php:
   - "7.4"
   - "8.0"
 
+env:
+  - TYPOS_VERSION="1.29.4"
+
 jobs:
   include:
     -
@@ -22,17 +25,17 @@ jobs:
       php: "7.4"
       script: "composer outdated --no-interaction --direct"
     -
-      name: "Spell check"
-      language: "python"
-      arch: "arm64-graviton2"
-      python: "3.9"
-      cache: "pip"
+      name: "Search for misspellings"
       before_install: "skip"
-      install: |
-        pip install 'codespell>=2.2'
-      script: |
-        codespell
-
+      install:
+      - |
+          mkdir -p "${HOME}/typos"
+          wget --progress=dot:mega --directory-prefix="${HOME}/typos" \
+              "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          tar -xzvf "${HOME}/typos/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz" -C "${HOME}/typos" ./typos
+      script:
+      - |
+          "${HOME}/typos/typos"
 cache:
   directories:
     - "${HOME}/.composer/cache"
