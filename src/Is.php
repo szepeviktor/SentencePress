@@ -83,7 +83,7 @@ class Is
      *
      * @param string $type Type of request.
      * @return bool
-     * phpcs:disable NeutronStandard.Functions.LongFunction.LongFunction
+     * phpcs:disable SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
      */
     public static function request(string $type): bool
     {
@@ -101,6 +101,7 @@ class Is
                 return \is_admin();
             case 'login':
                 return isset($_SERVER['REQUEST_URI'])
+                    && \is_string($_SERVER['REQUEST_URI'])
                     && \explode('?', $_SERVER['REQUEST_URI'])[0]
                         === \wp_parse_url(\wp_login_url('', true), \PHP_URL_PATH);
             case 'async-upload':
