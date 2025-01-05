@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace SzepeViktor\SentencePress;
 
 use DOMDocument;
+use DOMElement;
 use Traversable;
 
 use function esc_attr;
@@ -20,6 +21,7 @@ use function esc_html;
 use function esc_url;
 use function get_template_directory_uri;
 use function sanitize_key;
+use function wp_json_encode;
 
 /**
  * Return whether an array or a string is empty.
@@ -44,11 +46,11 @@ function isEmpty($thing): bool
 /**
  * Check whether a value is a non-empty array.
  *
- * @param mixed $array Array to be tested.
+ * @param mixed $thing Array to be tested.
  */
-function isNonEmptyArray($array): bool
+function isNonEmptyArray($thing): bool
 {
-    return is_array($array) && $array !== [];
+    return is_array($thing) && $thing !== [];
 }
 
 /**
@@ -209,19 +211,19 @@ function htmlComment(string $comment): string
 /**
  * @param mixed $condition
  */
-function ifPrint($condition, string $string): void
+function ifPrint($condition, string $content): void
 {
     if (! $condition) {
         return;
     }
 
-    // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
-    print $string;
+    // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
+    print $content;
 }
 
 function printAssetUri(string $path = ''): void
 {
-    // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+    // phpcs:ignore Generic.PHP.ForbiddenFunctions.Found
     print esc_url(
         \sprintf(
             '%s/assets%s',
@@ -237,19 +239,22 @@ function printAssetUri(string $path = ''): void
  * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_In_HTML_Introduction
  *
  * @param array<string, string> $attrs
+ * phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps,PSR12NeutronRuleset.Strings.ConcatenationUsage.NotAllowed
  */
 function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): string
 {
-    $base_dir = get_template_directory().'/assets/img/';
+    $base_dir = get_template_directory() . '/assets/img/';
     $empty_svg = '<svg class="svg-empty"></svg>';
 
-    $cache_key = 'file-'.md5($filename.serialize($attrs));
+    $cache_key = 'file-' . md5($filename . wp_json_encode($attrs));
     $xml = wp_cache_get($cache_key, 'svg-contents');
     if ($xml !== false) {
+        /** @var string $xml */
         return $xml;
     }
 
-    $contents = file_get_contents($base_dir.$filename);
+    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+    $contents = file_get_contents($base_dir . $filename);
     if ($contents === false || $contents === '') {
         return $empty_svg;
     }
@@ -262,21 +267,26 @@ function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): str
         return $empty_svg;
     }
 
+    $svg_elem = $svg_elems->item(0);
+    assert($svg_elem instanceof DOMElement, 'length === 0 makes sure we have element 0');
+
     // May cause duplicate ID error
-    //$svg_elems->item(0)->removeAttribute('id');
+    //$svg_elem->removeAttribute('id');
 
     foreach ($attrs as $attr_name => $attr_value) {
-        $svg_elems->item(0)->setAttribute($attr_name, $attr_value);
+        $svg_elem->setAttribute($attr_name, $attr_value);
     }
 
+    // phpcs:disable Squiz.PHP.CommentedOutCode.Found
     // SVG version 1.1
     //$document->xmlVersion = '1.1';
-    //$svg_elems->item(0)->setAttribute('version', '1.1');
+    //$svg_elem->setAttribute('version', '1.1');
 
     // Handle the SVG as an image
-    $svg_elems->item(0)->setAttribute('role', 'img');
+    $svg_elem->setAttribute('role', 'img');
 
-    $xml = $document->saveXML($svg_elems->item(0));
+    $xml = $document->saveXML($svg_elem);
+    assert(is_string($xml), 'saveXML returns false on failure');
 
     wp_cache_set($cache_key, $xml, 'svg-contents', $ttl);
 
