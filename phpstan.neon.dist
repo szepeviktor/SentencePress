@@ -1,14 +1,18 @@
 includes:
     - vendor/szepeviktor/phpstan-wordpress/extension.neon
+    - vendor/johnbillion/wp-compat/extension.neon
 parameters:
     level: max
     inferPrivatePropertyTypeFromConstructor: true
+    phpVersion: 70400 # PHP 7.4
     bootstrapFiles:
         - tests/bootstrap.php
     paths:
         - src/
         - tests/HookAnnotation.php
         - tests/HookProxy.php
+    WPCompat:
+        requiresAtLeast: '4.9'
     ignoreErrors:
         # PHPStan has problems with callables.
         -
