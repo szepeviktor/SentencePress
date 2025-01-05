@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace SzepeViktor\SentencePress;
 
+use DOMDocument;
 use Traversable;
 
 use function esc_attr;
