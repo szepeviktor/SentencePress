@@ -12,7 +12,7 @@
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-        "johnbillion/wp-compat": "^0.3.1",
+        "johnbillion/wp-compat": "^1.1",
         "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^1.1.1",
         "szepeviktor/phpstan-wordpress": "^2.0",
         "wp-coding-standards/wpcs": "3.1.0 as 2.3.0"
