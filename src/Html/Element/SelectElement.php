@@ -18,11 +18,6 @@ use function esc_html;
 
 class SelectElement extends Element
 {
-    /** @var list<string> */
-    protected array $childrenContent;
-
-    protected string $childTagName;
-
     /**
      * @param array<string, string> $attributes HTML attributes of the select element.
      * @param array<string, string> $options Option elements value=>raw_item.
