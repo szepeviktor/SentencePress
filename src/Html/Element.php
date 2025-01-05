@@ -57,7 +57,7 @@ class Element
      */
     public function __construct(string $tagName = 'div', array $attributes = [], $content = '')
     {
-        $this->tagName = sanitize_key($tagName); // lower?
+        $this->tagName = sanitize_key($tagName);
         $this->attributes = $attributes;
         $this->content = $content instanceof Traversable
             ? \implode(\iterator_to_array($content))
