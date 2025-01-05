@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace SzepeViktor\SentencePress;
 
+use DOMDocument;
+
 use function esc_url;
 use function get_template_directory_uri;
 
