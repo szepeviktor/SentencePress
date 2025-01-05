@@ -32,14 +32,14 @@ trait HookProxy
 
     protected function lazyHookFunction(
         string $actionTag,
-        callable $callable,
+        callable $callback,
         int $priority,
         int $argumentCount,
         string $filePath
     ): void {
         add_filter(
             $actionTag,
-            $this->generateClosureWithFileLoad($actionTag, $callable, $filePath),
+            $this->generateClosureWithFileLoad($actionTag, $callback, $filePath),
             $priority,
             $argumentCount
         );
@@ -47,13 +47,13 @@ trait HookProxy
 
     protected function lazyHookStaticMethod(
         string $actionTag,
-        callable $callable,
+        callable $callback,
         int $priority,
         int $argumentCount
     ): void {
         add_filter(
             $actionTag,
-            $this->generateClosure($actionTag, $callable),
+            $this->generateClosure($actionTag, $callback),
             $priority,
             $argumentCount
         );
@@ -61,14 +61,14 @@ trait HookProxy
 
     protected function lazyHookMethod(
         string $actionTag,
-        callable $callable,
+        callable $callback,
         int $priority,
         int $argumentCount,
         ?callable $injector = null
     ): void {
         add_filter(
             $actionTag,
-            $this->generateClosureWithInjector($actionTag, $callable, $injector),
+            $this->generateClosureWithInjector($actionTag, $callback, $injector),
             $priority,
             $argumentCount
         );
@@ -107,10 +107,10 @@ trait HookProxy
 
     protected function unhook(
         string $actionTag,
-        callable $callable,
+        callable $callback,
         int $priority
     ): void {
-        $id = $this->buildUniqueId($actionTag, $callable);
+        $id = $this->buildUniqueId($actionTag, $callback);
         if (! array_key_exists($id, $this->callablesAdded)) {
             return;
         }
@@ -125,53 +125,53 @@ trait HookProxy
 
     // phpcs:disable NeutronStandard.Functions.TypeHint.NoReturnType
 
-    protected function generateClosure(string $actionTag, callable $callable): Closure
+    protected function generateClosure(string $actionTag, callable $callback): Closure
     {
-        $id = $this->buildUniqueId($actionTag, $callable);
-        $this->callablesAdded[$id] = static function (...$args) use ($callable) {
-            return call_user_func_array($callable, $args);
+        $id = $this->buildUniqueId($actionTag, $callback);
+        $this->callablesAdded[$id] = static function (...$args) use ($callback) {
+            return call_user_func_array($callback, $args);
         };
 
         return $this->callablesAdded[$id];
     }
 
-    protected function generateClosureWithFileLoad(string $actionTag, callable $callable, string $filePath): Closure
+    protected function generateClosureWithFileLoad(string $actionTag, callable $callback, string $filePath): Closure
     {
-        $id = $this->buildUniqueId($actionTag, $callable);
-        $this->callablesAdded[$id] = static function (...$args) use ($filePath, $callable) {
+        $id = $this->buildUniqueId($actionTag, $callback);
+        $this->callablesAdded[$id] = static function (...$args) use ($filePath, $callback) {
             require_once $filePath;
 
-            return call_user_func_array($callable, $args);
+            return call_user_func_array($callback, $args);
         };
 
         return $this->callablesAdded[$id];
     }
 
-    protected function generateClosureWithInjector(string $actionTag, callable $callable, ?callable $injector): Closure
+    protected function generateClosureWithInjector(string $actionTag, callable $callback, ?callable $injector): Closure
     {
-        if (! is_array($callable)) {
+        if (! is_array($callback)) {
             throw new \InvalidArgumentException(
-                sprintf('Callable is not an array: %s', var_export($callable, true))
+                sprintf('Callable is not an array: %s', var_export($callback, true))
             );
         }
 
-        $id = $this->buildUniqueId($actionTag, $callable);
+        $id = $this->buildUniqueId($actionTag, $callback);
         $this->callablesAdded[$id] = $injector === null
-            ? static function (...$args) use ($callable) {
-                return call_user_func_array($callable, $args);
+            ? static function (...$args) use ($callback) {
+                return call_user_func_array($callback, $args);
             }
-            : static function (...$args) use ($injector, $callable) {
-                $instance = call_user_func($injector, $callable[0]);
+            : static function (...$args) use ($injector, $callback) {
+                $instance = call_user_func($injector, $callback[0]);
 
-                return call_user_func_array([$instance, $callable[1]], $args);
+                return call_user_func_array([$instance, $callback[1]], $args);
             };
 
         return $this->callablesAdded[$id];
     }
 
-    protected function buildUniqueId(string $actionTag, callable $callable): string
+    protected function buildUniqueId(string $actionTag, callable $callback): string
     {
-        return sprintf('%s/%s', $actionTag, _wp_filter_build_unique_id('', $callable, 0));
+        return sprintf('%s/%s', $actionTag, _wp_filter_build_unique_id('', $callback, 0));
     }
 }
 // @TODO Measurements: w/o OPcache, OPcache with file read, OPcache without file read

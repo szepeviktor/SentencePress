@@ -49,6 +49,7 @@ class Db
     public function __set(string $name, $propertyValue): void
     {
     }
+
     // phpcs:enable SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 
     /**
@@ -56,7 +57,7 @@ class Db
      *
      * @see https://www.php.net/manual/en/language.oop5.overloading.php#object.call
      * @param string $name
-     * @param array<mixed> $arguments
+     * @param list<mixed> $arguments
      * @return mixed
      */
     public function __call(string $name, array $arguments)

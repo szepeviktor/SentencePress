@@ -108,8 +108,10 @@ class SiteInfo
         // phpcs:disable Squiz.NamingConventions.ValidVariableName
         global $wp_filesystem;
         if (! $wp_filesystem instanceof WP_Filesystem_Base) {
+            // @phpstan-ignore requireOnce.fileNotFound
             require_once sprintf('%swp-admin/includes/file.php', \ABSPATH);
         }
+        assert($wp_filesystem instanceof WP_Filesystem_Base);
 
         $this->setInfo();
 

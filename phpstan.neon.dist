@@ -12,7 +12,7 @@ parameters:
     ignoreErrors:
         # PHPStan has problems with callables.
         -
-            message: '#^Parameter \#2 \$callable of method SzepeViktor\\SentencePress\\Tests\\HookProxy::generateClosureWithInjector\(\) expects callable\(\): mixed, array\{class-string, non-falsy-string\} given\.$#'
+            message: '#^Parameter \#2 \$callback of method SzepeViktor\\SentencePress\\Tests\\HookProxy::generateClosureWithInjector\(\) expects callable\(\): mixed, array\{class-string, non-falsy-string\} given\.$#'
             count: 1
             path: src/HookProxy.php
         -
