@@ -16,11 +16,6 @@ use SzepeViktor\SentencePress\Html\Element;
 
 class ListElement extends Element
 {
-    /** @var list<string> */
-    protected array $childrenContent;
-
-    protected string $childTagName;
-
     /**
      * @param array<string, string> $attributes HTML attributes of the parent.
      * @param list<string> $childrenContent Raw HTML content of children.
