@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Create a div element with classes.
+ * Create a div element.
  *
  * @author  Viktor Szépe <viktor@szepe.net>
  * @license https://opensource.org/licenses/MIT MIT
@@ -14,6 +14,9 @@ namespace SzepeViktor\SentencePress\Html\Element;
 
 use SzepeViktor\SentencePress\Html\Element;
 
+/**
+ * Create a div element with classes.
+ */
 class DivWithClass extends Element
 {
     public function __construct(string $classString, string $content = '') {

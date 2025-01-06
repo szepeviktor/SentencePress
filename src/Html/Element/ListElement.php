@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Create an HTML element.
+ * Create a list element.
  *
  * @author  Viktor Szépe <viktor@szepe.net>
  * @license https://opensource.org/licenses/MIT MIT
@@ -14,6 +14,9 @@ namespace SzepeViktor\SentencePress\Html\Element;
 
 use SzepeViktor\SentencePress\Html\Element;
 
+/**
+ * Create a list element with attributes from a list of children.
+ */
 class ListElement extends Element
 {
     /**
@@ -27,20 +30,28 @@ class ListElement extends Element
         array $childrenContent = [],
         string $childTagName = 'li'
     ) {
-        parent::__construct($tagName, $attributes, \implode(\array_map(
-            static function (string $childContent) use ($childTagName): string {
-                return \implode([
-                    self::LESS_THAN_SIGN,
-                    $childTagName,
-                    self::GREATER_THAN_SIGN,
-                    $childContent,
-                    self::LESS_THAN_SIGN,
-                    self::SOLIDUS,
-                    $childTagName,
-                    self::GREATER_THAN_SIGN,
-                ]);
-            },
-            $childrenContent
-        )));
+        parent::__construct(
+            $tagName,
+            $attributes,
+            \implode(
+                array_map(
+                    static function (string $childContent) use ($childTagName): string {
+                        return \implode(
+                            [
+                                self::LESS_THAN_SIGN,
+                                $childTagName,
+                                self::GREATER_THAN_SIGN,
+                                $childContent,
+                                self::LESS_THAN_SIGN,
+                                self::SOLIDUS,
+                                $childTagName,
+                                self::GREATER_THAN_SIGN,
+                            ]
+                        );
+                    },
+                    $childrenContent
+                )
+            )
+        );
     }
 }

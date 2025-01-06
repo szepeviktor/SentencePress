@@ -17,7 +17,6 @@ use DOMElement;
 
 use function esc_url;
 use function get_template_directory_uri;
-use function sanitize_key;
 use function wp_json_encode;
 
 /**

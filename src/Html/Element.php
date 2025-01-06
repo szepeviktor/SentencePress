@@ -15,10 +15,12 @@ namespace SzepeViktor\SentencePress\Html;
 use Traversable;
 
 use function esc_attr;
-use function esc_html;
 use function esc_url;
 use function sanitize_key;
 
+/**
+ * Create an HTML element with attributes.
+ */
 class Element
 {
     public const SPACE = ' ';
@@ -76,7 +78,7 @@ class Element
     public static function fromSkeleton(array $skeleton, string $content = ''): self
     {
         // @phpstan-ignore isset.offset,isset.offset
-        if (!isset($skeleton['tag'], $skeleton['attrs'])) {
+        if (! isset($skeleton['tag'], $skeleton['attrs'])) {
             throw new \Exception('Skeleton array needs tag and attrs elements.');
         }
 
@@ -114,30 +116,34 @@ class Element
         $attributeString = $this->getAttributeString();
 
         if ($attributeString !== '') {
-            $attributeString = self::SPACE.$attributeString;
+            $attributeString = sprintf('%s%s', self::SPACE, $attributeString);
         }
 
         // Element.
         if ($this->isVoid) {
-            return \implode([
+            return \implode(
+                [
+                    self::LESS_THAN_SIGN,
+                    $this->tagName,
+                    $attributeString,
+                    self::GREATER_THAN_SIGN,
+                ]
+            );
+        }
+
+        return \implode(
+            [
                 self::LESS_THAN_SIGN,
                 $this->tagName,
                 $attributeString,
                 self::GREATER_THAN_SIGN,
-            ]);
-        }
-
-        return \implode([
-            self::LESS_THAN_SIGN,
-            $this->tagName,
-            $attributeString,
-            self::GREATER_THAN_SIGN,
-            $this->content,
-            self::LESS_THAN_SIGN,
-            self::SOLIDUS,
-            $this->tagName,
-            self::GREATER_THAN_SIGN,
-        ]);
+                $this->content,
+                self::LESS_THAN_SIGN,
+                self::SOLIDUS,
+                $this->tagName,
+                self::GREATER_THAN_SIGN,
+            ]
+        );
     }
 
     /**
@@ -155,15 +161,17 @@ class Element
                 continue;
             }
 
-            $attributeStrings[] = \implode([
-                $attributeName,
-                self::EQUALS_SIGN,
-                self::QUOTATION_MARK,
-                \in_array($attributeName, ['href', 'src'], true)
-                    ? esc_url($attributeValue)
-                    : esc_attr($attributeValue),
-                self::QUOTATION_MARK,
-            ]);
+            $attributeStrings[] = \implode(
+                [
+                    $attributeName,
+                    self::EQUALS_SIGN,
+                    self::QUOTATION_MARK,
+                    \in_array($attributeName, ['href', 'src'], true)
+                        ? esc_url($attributeValue)
+                        : esc_attr($attributeValue),
+                    self::QUOTATION_MARK,
+                ]
+            );
         }
 
         return \implode(self::SPACE, $attributeStrings);
