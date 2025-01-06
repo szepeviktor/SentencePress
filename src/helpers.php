@@ -50,7 +50,7 @@ function isEmpty($thing): bool
  */
 function isNonEmptyArray($thing): bool
 {
-    return is_array($thing) && $thing !== [];
+    return \is_array($thing) && $thing !== [];
 }
 
 /**
