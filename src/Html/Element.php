@@ -121,29 +121,25 @@ class Element
 
         // Element.
         if ($this->isVoid) {
-            return \implode(
-                [
-                    self::LESS_THAN_SIGN,
-                    $this->tagName,
-                    $attributeString,
-                    self::GREATER_THAN_SIGN,
-                ]
-            );
-        }
-
-        return \implode(
-            [
+            return \implode([
                 self::LESS_THAN_SIGN,
                 $this->tagName,
                 $attributeString,
                 self::GREATER_THAN_SIGN,
-                $this->content,
-                self::LESS_THAN_SIGN,
-                self::SOLIDUS,
-                $this->tagName,
-                self::GREATER_THAN_SIGN,
-            ]
-        );
+            ]);
+        }
+
+        return \implode([
+            self::LESS_THAN_SIGN,
+            $this->tagName,
+            $attributeString,
+            self::GREATER_THAN_SIGN,
+            $this->content,
+            self::LESS_THAN_SIGN,
+            self::SOLIDUS,
+            $this->tagName,
+            self::GREATER_THAN_SIGN,
+        ]);
     }
 
     /**
@@ -161,17 +157,15 @@ class Element
                 continue;
             }
 
-            $attributeStrings[] = \implode(
-                [
-                    $attributeName,
-                    self::EQUALS_SIGN,
-                    self::QUOTATION_MARK,
-                    \in_array($attributeName, ['href', 'src'], true)
-                        ? esc_url($attributeValue)
-                        : esc_attr($attributeValue),
-                    self::QUOTATION_MARK,
-                ]
-            );
+            $attributeStrings[] = \implode([
+                $attributeName,
+                self::EQUALS_SIGN,
+                self::QUOTATION_MARK,
+                \in_array($attributeName, ['href', 'src'], true)
+                    ? esc_url($attributeValue)
+                    : esc_attr($attributeValue),
+                self::QUOTATION_MARK,
+            ]);
         }
 
         return \implode(self::SPACE, $attributeStrings);

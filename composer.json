@@ -41,9 +41,9 @@
             "@phpcs:set-php-version",
             "@phpcs:run"
         ],
-        "phpcs:run": "phpcs -s --standard=PSR12NeutronRuleset src/",
+        "phpcs:run": "phpcs -s --standard=PSR12NeutronRuleset --exclude=PEAR.Functions.FunctionCallSignature src/",
         "phpcs:set-php-version": "phpcs --config-set php_version 70400",
-        "phpstan": "phpstan analyze",
+        "phpstan": "phpstan analyze -v",
         "syntax": "git ls-files --cached -z -- '*.php' | xargs -0 -L 1 -P 4 -- php -l",
         "test": [
             "@composer validate --strict",

@@ -30,28 +30,20 @@ class ListElement extends Element
         array $childrenContent = [],
         string $childTagName = 'li'
     ) {
-        parent::__construct(
-            $tagName,
-            $attributes,
-            \implode(
-                array_map(
-                    static function (string $childContent) use ($childTagName): string {
-                        return \implode(
-                            [
-                                self::LESS_THAN_SIGN,
-                                $childTagName,
-                                self::GREATER_THAN_SIGN,
-                                $childContent,
-                                self::LESS_THAN_SIGN,
-                                self::SOLIDUS,
-                                $childTagName,
-                                self::GREATER_THAN_SIGN,
-                            ]
-                        );
-                    },
-                    $childrenContent
-                )
-            )
-        );
+        parent::__construct($tagName, $attributes, \implode(array_map(
+            static function (string $childContent) use ($childTagName): string {
+                return \implode([
+                    self::LESS_THAN_SIGN,
+                    $childTagName,
+                    self::GREATER_THAN_SIGN,
+                    $childContent,
+                    self::LESS_THAN_SIGN,
+                    self::SOLIDUS,
+                    $childTagName,
+                    self::GREATER_THAN_SIGN,
+                ]);
+            },
+            $childrenContent
+        )));
     }
 }
