@@ -88,23 +88,30 @@ function printAssetUri(string $path = ''): void
  *
  * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_In_HTML_Introduction
  *
+ * @param string|false $path
  * @param array<string, string> $attrs
- * phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps,PSR12NeutronRuleset.Strings.ConcatenationUsage.NotAllowed
+ *
+ * phpcs:disable Squiz.NamingConventions.ValidVariableName.NotCamelCaps,Squiz.NamingConventions.ValidFunctionName.NotCamelCaps
  */
-function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): string
+function get_inline_svg($path, array $attrs = [], int $ttl = 3600): string
 {
-    $base_dir = get_template_directory() . '/assets/img/';
     $empty_svg = '<svg class="svg-empty"></svg>';
 
-    $cache_key = 'file-' . md5($filename . wp_json_encode($attrs));
+    // phpcs:ignore PSR12NeutronRuleset.Strings.ConcatenationUsage.NotAllowed
+    $cache_key = 'file-' . md5($path . wp_json_encode($attrs));
     $xml = wp_cache_get($cache_key, 'svg-contents');
     if ($xml !== false) {
-        /** @var string $xml */
+        assert(is_string($xml));
+
         return $xml;
     }
 
+    if ($path === false || ! file_exists($path)) {
+        return $empty_svg;
+    }
+
     // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-    $contents = file_get_contents($base_dir . $filename);
+    $contents = file_get_contents($path);
     if ($contents === false || $contents === '') {
         return $empty_svg;
     }
@@ -121,7 +128,7 @@ function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): str
     assert($svg_elem instanceof DOMElement, 'length === 0 makes sure we have element 0');
 
     // May cause duplicate ID error
-    //$svg_elem->removeAttribute('id');
+    $svg_elem->removeAttribute('id');
 
     foreach ($attrs as $attr_name => $attr_value) {
         $svg_elem->setAttribute($attr_name, $attr_value);
@@ -141,4 +148,41 @@ function getInlineSvg(string $filename, array $attrs = [], int $ttl = 3600): str
     wp_cache_set($cache_key, $xml, 'svg-contents', $ttl);
 
     return $xml;
+}
+
+/**
+ * Prepare an SVG from assets directory for inline display.
+ *
+ * @param array<string, string> $attrs
+ */
+function get_inline_svg_asset(string $filename, array $attrs = [], int $ttl = 3600): string
+{
+    return get_inline_svg(sprintf('%s/assets/img/%s', get_template_directory(), $filename), $attrs, $ttl);
+}
+
+/**
+ * Prepare an SVG from Media for inline display.
+ *
+ * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/SVG_In_HTML_Introduction
+ *
+ * @param array<string, string> $attrs
+ */
+function get_inline_svg_media(int $attachment_id, array $attrs = [], int $ttl = 3600): string
+{
+    return get_inline_svg(get_attached_file($attachment_id), $attrs, $ttl);
+}
+
+/**
+ * Prepare an SVG as an icon.
+ */
+function get_inline_svg_icon(string $filename, string $class_string = 'icon'): string
+{
+    return get_inline_svg_asset(
+        sprintf('icon/%s', $filename),
+        [
+            'class' => $class_string,
+            'width' => '24',
+            'height' => '24',
+        ]
+    );
 }
