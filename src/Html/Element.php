@@ -113,9 +113,11 @@ class Element
 
     public function setBooleanWhen(string $attribute, bool $condition): void
     {
-        if ($condition) {
-            $this->attributes[$attribute] = null;
+        if (! $condition) {
+            return;
         }
+
+        $this->attributes[$attribute] = null;
     }
 
     public function render(): string
