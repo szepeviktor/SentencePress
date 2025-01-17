@@ -111,6 +111,13 @@ class Element
         return $this->attributes;
     }
 
+    public function setBooleanWhen(string $attribute, bool $condition): void
+    {
+        if ($condition) {
+            $this->attributes[$attribute] = null;
+        }
+    }
+
     public function render(): string
     {
         $attributeString = $this->getAttributeString();
