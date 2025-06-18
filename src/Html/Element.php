@@ -111,6 +111,11 @@ class Element
         return $this->attributes;
     }
 
+    public function setAttribute(string $attributeName, string $attributeValue): void
+    {
+        $this->attributes[$attributeName] = $attributeValue;
+    }
+
     public function setBooleanWhen(string $attribute, bool $condition): void
     {
         if (! $condition) {
