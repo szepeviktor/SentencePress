@@ -108,7 +108,6 @@ class SiteInfo
         // phpcs:disable Squiz.NamingConventions.ValidVariableName
         global $wp_filesystem;
         if (! $wp_filesystem instanceof WP_Filesystem_Base) {
-            // @phpstan-ignore requireOnce.fileNotFound
             require_once sprintf('%swp-admin/includes/file.php', \ABSPATH);
         }
         assert($wp_filesystem instanceof WP_Filesystem_Base);
@@ -153,7 +152,6 @@ class SiteInfo
         if ($homeUrl !== '' && \strcasecmp($homeUrl, $siteUrl) !== 0) {
             $pos = \strripos(\ABSPATH, trailingslashit(\str_ireplace($homeUrl, '', $siteUrl)));
             if ($pos !== false) {
-                // @phpstan-ignore return.type
                 return \substr(\ABSPATH, 0, $pos);
             }
         }

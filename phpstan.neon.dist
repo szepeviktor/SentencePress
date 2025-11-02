@@ -11,6 +11,7 @@ parameters:
         - src/
         - tests/HookAnnotation.php
         - tests/HookProxy.php
+        - tests/Singleton.php
     WPCompat:
         requiresAtLeast: '5.1'
     ignoreErrors:
