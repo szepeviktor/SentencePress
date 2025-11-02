@@ -12,7 +12,7 @@ parameters:
         - tests/HookAnnotation.php
         - tests/HookProxy.php
     WPCompat:
-        requiresAtLeast: '4.9'
+        requiresAtLeast: '5.1'
     ignoreErrors:
         # PHPStan has problems with callables.
         -

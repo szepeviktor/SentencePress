@@ -52,7 +52,7 @@ class SiteInfo
             'plugins_path'    => \WP_PLUGIN_DIR,
             'plugins_url'     => \plugins_url(),
             'mu_plugins_path' => \WPMU_PLUGIN_DIR,
-            'mu_plugins_url'  => \WPMU_PLUGIN_URL,
+            'mu_plugins_url'  => \plugins_url(),
 
             // Themes
             'themes_root_path'  => \get_theme_root(),

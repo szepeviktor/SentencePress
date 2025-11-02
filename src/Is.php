@@ -90,9 +90,9 @@ class Is
         // phpcs:disable Squiz.PHP.CommentedOutCode.Found
         switch ($type) {
             case 'installing':
-                return \defined('WP_INSTALLING') && \WP_INSTALLING === true;
+                return \wp_installing();
             case 'index':
-                return \defined('WP_USE_THEMES') && \WP_USE_THEMES === true;
+                return \wp_using_themes();
             case 'frontend':
                 // Use !request('frontend') for admin pages.
                 return (! \is_admin() || \wp_doing_ajax() ) && ! \wp_doing_cron();
