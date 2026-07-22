@@ -17,6 +17,7 @@ use DOMElement;
 
 use function esc_url;
 use function get_template_directory_uri;
+use function preg_match;
 use function wp_json_encode;
 
 /**
@@ -47,6 +48,20 @@ function isEmpty($thing): bool
 function isNonEmptyArray($thing): bool
 {
     return \is_array($thing) && $thing !== [];
+}
+
+/**
+ * Check whether a string is valid UTF-8.
+ *
+ * Detects invalid leading and continuation bytes.
+ * Detects truncated byte sequences.
+ * Detects overlong encodings.
+ * Detects UTF-16 surrogate code points.
+ * Detects code points above U+10FFFF.
+ */
+function checkUTF8(string $subject): bool
+{
+    return preg_match('//u', $subject) === 1;
 }
 
 /**
