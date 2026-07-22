@@ -165,20 +165,15 @@ class Script
             return $html;
         }
 
-        $attributes = array_reduce(
-            $this->attributes,
-            static function (array $attributes, string $attribute) use ($html): array {
-                // Skip already present attributes
-                if (preg_match(sprintf('#\s%s[\s>]#', preg_quote($attribute, '#')), $html)) {
-                    return $attributes;
-                }
+        $attributes = [];
+        foreach ($this->attributes as $attribute) {
+            // Skip already present attributes
+            if (preg_match(sprintf('#\s%s[\s>]#', preg_quote($attribute, '#')), $html)) {
+                continue;
+            }
 
-                $attributes[] = $attribute;
-
-                return $attributes;
-            },
-            []
-        );
+            $attributes[] = $attribute;
+        }
 
         if ($attributes === []) {
             return $html;

@@ -162,8 +162,15 @@ trait HookProxy
             }
             : static function (...$args) use ($injector, $callback) {
                 $instance = call_user_func($injector, $callback[0]);
+                $instanceCallback = [$instance, $callback[1]];
 
-                return call_user_func_array([$instance, $callback[1]], $args);
+                if (! is_callable($instanceCallback)) {
+                    throw new \UnexpectedValueException(
+                        sprintf('Injector returned an incompatible object for method: %s', $callback[1])
+                    );
+                }
+
+                return call_user_func_array($instanceCallback, $args);
             };
 
         return $this->callablesAdded[$id];
