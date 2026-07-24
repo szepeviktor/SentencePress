@@ -30,9 +30,12 @@ trait HookProxy
     /** @var array<string, \Closure(mixed ...$args): mixed> */
     protected $callablesAdded;
 
+    /**
+     * @param non-empty-string $callback
+     */
     protected function lazyHookFunction(
         string $actionTag,
-        callable $callback,
+        string $callback,
         int $priority,
         int $argumentCount,
         string $filePath
@@ -135,11 +138,20 @@ trait HookProxy
         return $this->callablesAdded[$id];
     }
 
-    protected function generateClosureWithFileLoad(string $actionTag, callable $callback, string $filePath): Closure
+    /**
+     * @param non-empty-string $callback
+     */
+    protected function generateClosureWithFileLoad(string $actionTag, string $callback, string $filePath): Closure
     {
-        $id = $this->buildUniqueId($actionTag, $callback);
+        $id = sprintf('%s/%s', $actionTag, $callback);
         $this->callablesAdded[$id] = static function (...$args) use ($filePath, $callback) {
             require_once $filePath;
+
+            if (! is_callable($callback)) {
+                throw new \UnexpectedValueException(
+                    sprintf('File did not define the expected function: %s', $callback)
+                );
+            }
 
             return call_user_func_array($callback, $args);
         };

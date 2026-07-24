@@ -19,17 +19,19 @@ for working with WordPress.
 ### Examples
 
 ```php
-use SzepeViktor\SentencePress\Context;
-use SzepeViktor\SentencePress\ContextFlag;
-use SzepeViktor\SentencePress\PrimaryContext;
-
 $context = Context::detect();
 
-if ($context->is(PrimaryContext::Ajax) && $context->has(ContextFlag::Autosave)) {
-    // Handle an autosave sent through admin-ajax.php.
+if (
+    $context->is(PrimaryContext::Ajax)
+    && $context->has(ContextFlag::Authenticated)
+) {
+    // Handle an authenticated admin-ajax.php request.
 }
 
-if ($context->is(PrimaryContext::Cron) && $context->has(ContextFlag::RuntimeCli)) {
+if (
+    $context->is(PrimaryContext::Cron)
+    && $context->has(ContextFlag::RuntimeCli)
+) {
     // wp-cron.php is running from the command line.
 }
 
@@ -49,10 +51,11 @@ $mainJs
 ```
 
 ```php
-// Instead of add_action('plugins_loaded', [$this, 'init'], 0, 20);
+// Instead of add_action('plugins_loaded', [$this, 'init'], 20, 0);
 class Plugin
 {
-    use SzepeViktor\SentencePress\HookAnnotation;
+    use HookAnnotation;
+
     public function __construct()
     {
         $this->hookMethods();
@@ -73,7 +76,8 @@ class Plugin
 // template-functions.php will be loaded and pingbackHeader called when wp_head hook is fired
 class Template
 {
-    use SzepeViktor\SentencePress\HookProxy;
+    use HookProxy;
+
     public function __construct()
     {
         $this->lazyHookFunction(
