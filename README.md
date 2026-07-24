@@ -19,6 +19,26 @@ for working with WordPress.
 ### Examples
 
 ```php
+use SzepeViktor\SentencePress\Context;
+use SzepeViktor\SentencePress\ContextFlag;
+use SzepeViktor\SentencePress\PrimaryContext;
+
+$context = Context::detect();
+
+if ($context->is(PrimaryContext::Ajax) && $context->has(ContextFlag::Autosave)) {
+    // Handle an autosave sent through admin-ajax.php.
+}
+
+if ($context->is(PrimaryContext::Cron) && $context->has(ContextFlag::RuntimeCli)) {
+    // wp-cron.php is running from the command line.
+}
+
+if ($context->has(ContextFlag::WpCliContextAdmin)) {
+    // WP-CLI selected its admin context.
+}
+```
+
+```php
 // Instead of wp_enqueue_script('main-js', get_template_directory_uri() . '/assets/js/main.js', [], '8.44', true)
 $mainJs = new Script(get_template_directory_uri() . '/assets/js/main.js');
 $mainJs
