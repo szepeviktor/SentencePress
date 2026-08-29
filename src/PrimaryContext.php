@@ -28,5 +28,6 @@ enum PrimaryContext: string
     case AsyncUpload = 'async-upload';
     case AdminPost = 'admin-post';
     case Admin = 'admin';
-    case Frontend = 'frontend';
+    /** Frontend. */
+    case PublicWeb = 'public-web';
 }

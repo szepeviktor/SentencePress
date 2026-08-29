@@ -22,12 +22,14 @@ use function in_array;
 use function is_admin;
 use function is_callable;
 use function is_customize_preview;
+use function is_favicon;
 use function is_feed;
 use function is_login;
 use function is_object;
 use function is_preview;
 use function is_robots;
 use function is_search;
+use function is_sitemap;
 use function is_string;
 use function is_trackback;
 use function is_user_logged_in;
@@ -81,7 +83,7 @@ final class Context
             self::isAdminPost() => PrimaryContext::AdminPost,
             self::isAdmin() => PrimaryContext::Admin,
             self::isCli() => PrimaryContext::Cli,
-            default => PrimaryContext::Frontend,
+            default => PrimaryContext::PublicWeb,
         };
     }
 
@@ -117,6 +119,8 @@ final class Context
             ...(self::isSearch() ? [ContextFlag::Search] : []),
             ...(self::isFeed() ? [ContextFlag::Feed] : []),
             ...(self::isRobots() ? [ContextFlag::Robots] : []),
+            ...(self::isFavicon() ? [ContextFlag::Favicon] : []),
+            ...(self::isSitemap() ? [ContextFlag::Sitemap] : []),
             ...(self::isTrackback() ? [ContextFlag::Trackback] : []),
         ];
     }
@@ -300,7 +304,12 @@ final class Context
 
     public static function isFrontend(): bool
     {
-        return self::current() === PrimaryContext::Frontend;
+        return self::isPublicWeb();
+    }
+
+    public static function isPublicWeb(): bool
+    {
+        return self::current() === PrimaryContext::PublicWeb;
     }
 
     public static function isAutosave(): bool
@@ -451,6 +460,16 @@ final class Context
     public static function isRobots(): bool
     {
         return self::isQueryResolved() && is_robots();
+    }
+
+    public static function isFavicon(): bool
+    {
+        return self::isQueryResolved() && function_exists('is_favicon') && is_favicon();
+    }
+
+    public static function isSitemap(): bool
+    {
+        return self::isQueryResolved() && function_exists('is_sitemap') && is_sitemap();
     }
 
     public static function isTrackback(): bool

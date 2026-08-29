@@ -43,6 +43,8 @@ enum ContextFlag: string
     case Search = 'search';
     case Feed = 'feed';
     case Robots = 'robots';
+    case Favicon = 'favicon';
+    case Sitemap = 'sitemap';
     case Trackback = 'trackback';
 
     public function requiresResolvedQuery(): bool
@@ -55,6 +57,8 @@ enum ContextFlag: string
             self::Search,
             self::Feed,
             self::Robots,
+            self::Favicon,
+            self::Sitemap,
             self::Trackback => true,
             default => false,
         };
